@@ -45,6 +45,11 @@ public class DefaultOrderService implements OrderService {
 	 * Apply both @Transactional and @Async only make sure spring to manage the
 	 * transaction of this method, however it won't connection this transaction
 	 * with caller's transaction, as it is in a dedicated thread.
+	 * <p/>
+	 * That says we must declare @Transactional on either
+	 * <code>DefaultOrderService</code> or on <code>query(int time)</code>
+	 * methods, otherwise Spring won't generate transactional proxy for this
+	 * instance.
 	 */
 	@Async
 	@Transactional
