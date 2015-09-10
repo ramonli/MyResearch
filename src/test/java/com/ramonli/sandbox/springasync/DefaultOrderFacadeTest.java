@@ -22,6 +22,16 @@ public class DefaultOrderFacadeTest {
 		jdbcTemplate = (JdbcTemplate) springContext.getBean("jdbcTemplate");
 	}
 
+	/**
+	 * There are 2 independent transactions, 1st is orderFacade.facade(), 2nd is
+	 * DefaultOrderService.query(int) which is annotated by @Async.
+	 * <p/>
+	 * <h1>orderFacade.facade("xixi", 1)</h1>
+	 * both transactions will commit.
+	 * <h1>orderFacade.facade("xixi", 4)</h1>
+	 * 1st transaction will roll back, 2nd will commit
+	 * <h1>orderFacade.facade("xixi", 6)</h1> both transactions will roll back
+	 */
 	@Test
 	public void testFacade() throws Exception {
 		String resp = orderFacade.facade("xixi", 4);
