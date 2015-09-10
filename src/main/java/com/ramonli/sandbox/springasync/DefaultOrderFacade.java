@@ -61,9 +61,21 @@ public class DefaultOrderFacade implements OrderFacade {
 				logger.debug("flush()");
 			}
 
+			/**
+			 * The order of callback methods is as below:
+			 * <ol>
+			 * <li>beforeCommit()</li>
+			 * <li>beforeCompletion()</li>
+			 * <li>afterCommit()</li>
+			 * <li>afterCompletion()</li>
+			 * </ol>
+			 * If transaction will be rolled back at last, both
+			 * <code>beforeCommit()</code> and <code>afterCommit()</code> won't
+			 * be called.
+			 */
 			@Override
 			public void beforeCommit(boolean readOnly) {
-				logger.debug("beforeCommit()");
+				logger.debug("beforeCommit()..readOnly: {}", readOnly);
 			}
 
 			@Override
