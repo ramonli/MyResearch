@@ -12,6 +12,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
 // @Transactional
@@ -51,6 +53,50 @@ public class DefaultOrderService implements OrderService {
 		logger.debug("query order: {}", time + "");
 		logger.debug("this.class: {}", this.getClass().getName());
 		logger.debug("daemon thread? {}", Thread.currentThread().isDaemon());
+
+		// register a transaction event listener..this method will be executed
+		// in a independent transaction context.
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+			private boolean committed = false;
+
+			@Override
+			public void suspend() {
+				logger.debug("suspend()");
+			}
+
+			@Override
+			public void resume() {
+				logger.debug("resume()");
+			}
+
+			@Override
+			public void flush() {
+				logger.debug("flush()");
+			}
+
+			@Override
+			public void beforeCommit(boolean readOnly) {
+				logger.debug("beforeCommit()");
+			}
+
+			@Override
+			public void beforeCompletion() {
+				logger.debug("beforeCompletion()");
+			}
+
+			@Override
+			public void afterCommit() {
+				logger.debug("afterCommit()");
+				this.committed = true;
+			}
+
+			@Override
+			public void afterCompletion(int status) {
+				logger.debug("afterCompletion()");
+				logger.debug(committed ? "committed" : "roll back");
+			}
+		});
+
 		try {
 			this.getJdbcTemplate().update("insert into async1(title) values('async op')");
 

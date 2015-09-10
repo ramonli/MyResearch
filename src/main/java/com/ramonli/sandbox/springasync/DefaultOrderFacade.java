@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
-// By default the transaction manager will be a bean named  'transactionManager'.
+// By default the transaction manager will be a bean named 'transactionManager'.
 @Transactional
 public class DefaultOrderFacade implements OrderFacade {
 	private Logger logger = LoggerFactory.getLogger(DefaultOrderFacade.class);
@@ -40,7 +42,49 @@ public class DefaultOrderFacade implements OrderFacade {
 			logger.error(e.getMessage());
 		}
 
-		if (waitTime > 5) {
+		// register a transaction event listener
+		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+			private boolean committed = false;
+
+			@Override
+			public void suspend() {
+				logger.debug("suspend()");
+			}
+
+			@Override
+			public void resume() {
+				logger.debug("resume()");
+			}
+
+			@Override
+			public void flush() {
+				logger.debug("flush()");
+			}
+
+			@Override
+			public void beforeCommit(boolean readOnly) {
+				logger.debug("beforeCommit()");
+			}
+
+			@Override
+			public void beforeCompletion() {
+				logger.debug("beforeCompletion()");
+			}
+
+			@Override
+			public void afterCommit() {
+				logger.debug("afterCommit()");
+				this.committed = true;
+			}
+
+			@Override
+			public void afterCompletion(int status) {
+				logger.debug("afterCompletion()");
+				logger.debug(committed ? "committed" : "roll back");
+			}
+		});
+
+		if (waitTime > 3) {
 			throw new RuntimeException("exception to trigger transaction rollback.");
 		}
 		return result;

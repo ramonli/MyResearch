@@ -1,7 +1,5 @@
 package com.ramonli.sandbox.springasync;
 
-import static org.junit.Assert.fail;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -26,7 +24,7 @@ public class DefaultOrderFacadeTest {
 
 	@Test
 	public void testFacade() throws Exception {
-		String resp = orderFacade.facade("xixi", 6);
+		String resp = orderFacade.facade("xixi", 4);
 		logger.debug("response is {}", resp);
 	}
 
