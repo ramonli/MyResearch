@@ -16,7 +16,7 @@ public class DefaultOrderServiceTest {
 
 	@BeforeClass
 	public static void init() {
-		ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("spring.xml");
+		ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("spring-async.xml");
 		orderService = (OrderService) springContext.getBean("defaultOrderService");
 		jdbcTemplate = (JdbcTemplate) springContext.getBean("jdbcTemplate");
 	}

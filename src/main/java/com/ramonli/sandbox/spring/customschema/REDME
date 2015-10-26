@@ -1,0 +1,3 @@
+To implement a customized name space handler, you must prepare two files with dedicated name which located under META-INF,
+* spring.handlers - which defines the name space handler(handler implementation will register a bean definition parser to your name space).
+* spring.schemas - which will point to a xml schema file, which restrict the format of your name space.  

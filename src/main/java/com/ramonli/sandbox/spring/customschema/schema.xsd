@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xsd:schema xmlns="http://blog.csdn.net/sandbox/people"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://blog.csdn.net/sandbox/people"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+
+	<xsd:element name="people" type="people" />
+
+	<xsd:complexType name="people">
+		<xsd:complexContent>
+			<!-- Must explicitly announce the extension of 'beans:identifiedType', 
+				otherwise you can't apply bean's attribute on 'people' element, such as 'id' 
+				attribute. -->
+			<xsd:extension base="beans:identifiedType">
+				<xsd:sequence>
+
+					<xsd:element name="address" type="address" minOccurs="0"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+				<!-- xsd:attribute name="id" type="xsd:string" use="required"/ -->
+				<xsd:attribute name="age" type="xsd:int" use="required" />
+				<xsd:attribute name="name" type="xsd:string" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="address">
+		<xsd:sequence />
+		<xsd:attribute name="street" type="xsd:string" />
+		<xsd:attribute name="city" type="xsd:string" />
+		<xsd:attribute name="zipcode" type="xsd:string" />
+		<xsd:attribute name="country" type="xsd:string" />
+	</xsd:complexType>
+</xsd:schema>

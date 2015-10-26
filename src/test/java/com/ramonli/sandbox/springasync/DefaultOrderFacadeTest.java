@@ -15,7 +15,7 @@ public class DefaultOrderFacadeTest {
 
 	@BeforeClass
 	public static void init() {
-		ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("spring.xml");
+		ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("spring-async.xml");
 		orderFacade = (OrderFacade) springContext.getBean("defaultOrderFacade");
 		logger.debug("aop proxy: {}", AopUtils.isAopProxy(orderFacade));
 		logger.debug("jdk proxy: {}", AopUtils.isJdkDynamicProxy(orderFacade));
