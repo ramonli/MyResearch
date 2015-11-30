@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class DefaultOrderServiceTest {
+public class DefaultOrderServiceTest{
 	private Logger logger = LoggerFactory.getLogger(DefaultOrderServiceTest.class);
 	private static OrderService orderService;
 	private static JdbcTemplate jdbcTemplate;
@@ -21,14 +21,16 @@ public class DefaultOrderServiceTest {
 		jdbcTemplate = (JdbcTemplate) springContext.getBean("jdbcTemplate");
 	}
 
-	@Test
-	public void testOrder() throws Exception {
-		this.orderService.order("menu pls");
-		logger.debug("call query service.");
-		Future<String> future = this.orderService.query(5);
+//	@Test
+//	public void testOrder() throws Exception {
+//		this.orderService.order("menu pls");
+//		logger.debug("call query service.");
+//	}
+
+	public void testUpdate() throws Exception {
+		Future<String> future = this.orderService.update(5);
 		logger.debug("finish calling query service.");
 		logger.debug("Result is {}", future.get());
 		logger.debug("got result from query service.");
 	}
-
 }

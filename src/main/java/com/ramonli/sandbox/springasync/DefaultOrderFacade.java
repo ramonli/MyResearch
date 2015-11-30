@@ -25,9 +25,9 @@ public class DefaultOrderFacade implements OrderFacade {
 		logger.debug("aop proxy: {}", AopUtils.isAopProxy(orderService));
 		logger.debug("jdk proxy: {}", AopUtils.isJdkDynamicProxy(orderService));
 		this.getOrderService().order(orderId);
-		Future<String> future = this.getOrderService().query(waitTime);
-
+		
 		String result = null;
+		Future<String> future = this.getOrderService().update(waitTime);
 		try {
 			result = future.get();
 		} catch (Exception e) {
@@ -96,7 +96,7 @@ public class DefaultOrderFacade implements OrderFacade {
 			}
 		});
 
-		if (waitTime > 3) {
+		if (waitTime > 5) {
 			throw new RuntimeException("exception to trigger transaction rollback.");
 		}
 		return result;

@@ -23,9 +23,10 @@ public class DefaultOrderService implements OrderService {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
+	@Transactional
 	public String order(String req) {
 		logger.debug("got request: {}", req);
-		this.getJdbcTemplate().update("insert into async1(title) values('sync op')");
+		this.getJdbcTemplate().update("insert into async1(title) values('sync order')");
 		/**
 		 * Here the query() method won't be executed asynchronously, as it is a
 		 * invocation inside the instance of <code>DefaultOrderService</code>.
@@ -36,14 +37,14 @@ public class DefaultOrderService implements OrderService {
 		 * the method will be called on @Async proxy of
 		 * <code>DefaultOrderService</code>.
 		 */
-		this.query(1);
+		this.update(1);
 
 		return "good deal";
 	}
 
 	/**
 	 * Apply both @Transactional and @Async only make sure spring to manage the
-	 * transaction of this method, however it won't connection this transaction
+	 * transaction of this method, however it won't connect this transaction
 	 * with caller's transaction, as it is in a dedicated thread.
 	 * <p/>
 	 * That says we must declare @Transactional on either
@@ -51,66 +52,66 @@ public class DefaultOrderService implements OrderService {
 	 * methods, otherwise Spring won't generate transactional proxy for this
 	 * instance.
 	 */
-	@Async
 	@Transactional
+	@Async
 	@Override
-	public Future<String> query(int time) {
+	public Future<String> update(int time) {
 		logger.debug("query order: {}", time + "");
 		logger.debug("this.class: {}", this.getClass().getName());
 		logger.debug("daemon thread? {}", Thread.currentThread().isDaemon());
 
-		// register a transaction event listener..this method will be executed
-		// in a independent transaction context.
-		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-			private boolean committed = false;
-
-			@Override
-			public void suspend() {
-				logger.debug("suspend()");
-			}
-
-			@Override
-			public void resume() {
-				logger.debug("resume()");
-			}
-
-			@Override
-			public void flush() {
-				logger.debug("flush()");
-			}
-
-			@Override
-			public void beforeCommit(boolean readOnly) {
-				logger.debug("beforeCommit()");
-			}
-
-			@Override
-			public void beforeCompletion() {
-				logger.debug("beforeCompletion()");
-			}
-
-			@Override
-			public void afterCommit() {
-				logger.debug("afterCommit()");
-				this.committed = true;
-			}
-
-			@Override
-			public void afterCompletion(int status) {
-				logger.debug("afterCompletion()");
-				logger.debug(committed ? "committed" : "roll back");
-			}
-		});
+//		// register a transaction event listener..this method will be executed
+//		// in a independent transaction context.
+//		TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+//			private boolean committed = false;
+//
+//			@Override
+//			public void suspend() {
+//				logger.debug("suspend()");
+//			}
+//
+//			@Override
+//			public void resume() {
+//				logger.debug("resume()");
+//			}
+//
+//			@Override
+//			public void flush() {
+//				logger.debug("flush()");
+//			}
+//
+//			@Override
+//			public void beforeCommit(boolean readOnly) {
+//				logger.debug("beforeCommit()");
+//			}
+//
+//			@Override
+//			public void beforeCompletion() {
+//				logger.debug("beforeCompletion()");
+//			}
+//
+//			@Override
+//			public void afterCommit() {
+//				logger.debug("afterCommit()");
+//				this.committed = true;
+//			}
+//
+//			@Override
+//			public void afterCompletion(int status) {
+//				logger.debug("afterCompletion()");
+//				logger.debug(committed ? "committed" : "roll back");
+//			}
+//		});
 
 		try {
-			this.getJdbcTemplate().update("insert into async1(title) values('async op')");
+			this.getJdbcTemplate().update("insert into async1(title) values('async update')");
 
 			Thread.sleep(time * 1000);
 			logger.debug("good sleep");
 		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);
 		}
-		if (time > 5) {
+		if (time > 3) {
 			throw new RuntimeException("roll back exception");
 		}
 		return new AsyncResult<String>("find order information");

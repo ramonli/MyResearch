@@ -6,5 +6,5 @@ public interface OrderService {
 
 	String order(String req);
 	
-	Future<String> query(int time);
+	Future<String> update(int time);
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="metrics_rollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>./logs/ramonli_sandbox_mertrics.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>./logs/ramonli_sandbox_metrics.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="async-stdout" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="stdout" />
+		<includeCallerData>true</includeCallerData>
+	</appender>
+	<appender name="async_metrics_rollingFile" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="metrics_rollingFile" />
+		<includeCallerData>true</includeCallerData>
+	</appender>
+
+	<logger name="com.ramonli.sandbox">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="com.ramonli.metrics" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="async-stdout" />
+		<appender-ref ref="async_metrics_rollingFile" />
+	</logger>
+
+	<logger name="org.springframework.amqp">
+		<level value="INFO" />
+	</logger>
+
+	<root level="WARN">
+		<appender-ref ref="async-stdout" />
+		<appender-ref ref="async-rollingFile" />
+	</root>
+</configuration>
