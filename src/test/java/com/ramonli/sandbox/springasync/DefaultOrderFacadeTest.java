@@ -17,8 +17,10 @@ public class DefaultOrderFacadeTest {
 	public static void init() {
 		ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("spring-async.xml");
 		orderFacade = (OrderFacade) springContext.getBean("defaultOrderFacade");
-		logger.debug("aop proxy: {}", AopUtils.isAopProxy(orderFacade));
-		logger.debug("jdk proxy: {}", AopUtils.isJdkDynamicProxy(orderFacade));
+		logger.debug("orderFacade - aop proxy: {}", AopUtils.isAopProxy(orderFacade));
+		logger.debug("orderFacade - jdk proxy: {}", AopUtils.isJdkDynamicProxy(orderFacade));
+		logger.debug("orderFacade - cglib proxy: {}", AopUtils.isCglibProxy(orderFacade));
+		logger.debug("orderFacade - target type: {}", AopUtils.getTargetClass(orderFacade));
 		jdbcTemplate = (JdbcTemplate) springContext.getBean("jdbcTemplate");
 	}
 

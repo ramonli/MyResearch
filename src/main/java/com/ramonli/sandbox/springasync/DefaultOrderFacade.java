@@ -22,8 +22,9 @@ public class DefaultOrderFacade implements OrderFacade {
 
 	@Override
 	public String facade(String orderId, int waitTime) throws Exception {
-		logger.debug("aop proxy: {}", AopUtils.isAopProxy(orderService));
-		logger.debug("jdk proxy: {}", AopUtils.isJdkDynamicProxy(orderService));
+		logger.debug("orderService - aop proxy: {}", AopUtils.isAopProxy(orderService));
+		logger.debug("orderService - jdk proxy: {}", AopUtils.isJdkDynamicProxy(orderService));
+		logger.debug("orderService - cglib proxy: {}", AopUtils.isCglibProxy(orderService));
 		this.getOrderService().order(orderId);
 		
 		String result = null;
