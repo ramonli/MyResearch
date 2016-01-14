@@ -18,19 +18,19 @@ public class ConcurrentServiceTest {
 		ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("spring-aop.xml");
 		concurrentService = (ConcurrentService) springContext.getBean("defaultConcurrentService");
 	}
-
-	@Ignore
-	@Test
-	public void testBizService() {
-		logger.debug("+----------------------------------------------------------+");
-		logger.debug("+ testBizService()                                         +");
-		logger.debug("+----------------------------------------------------------+");
-		
-		OrderInfo info = new OrderInfo();
-		info.setCount(2);
-		info.setSerialNo("1281231254");
-		concurrentService.bizService(info);
-	}
+//
+//	@Ignore
+//	@Test
+//	public void testBizService() {
+//		logger.debug("+----------------------------------------------------------+");
+//		logger.debug("+ testBizService()                                         +");
+//		logger.debug("+----------------------------------------------------------+");
+//		
+//		OrderInfo info = new OrderInfo();
+//		info.setCount(2);
+//		info.setSerialNo("1281231254");
+//		concurrentService.bizService(info);
+//	}
 
 	@Test
 	public void testCancelOrder() {

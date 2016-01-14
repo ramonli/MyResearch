@@ -17,7 +17,8 @@
 	<context:annotation-config />
 	<!-- Must clearly give below statement, otherwise the @Async annotation 
 		won't work. -->
-	<task:annotation-driven />
+	<task:annotation-driven executor="ramon_async" />
+	<task:executor id="ramon_async" pool-size="10" queue-capacity="100"/>
 	<!-- Must clearly give below statement, otherwise the @Transtional annotation 
 		won't work. -->
 	<tx:annotation-driven />

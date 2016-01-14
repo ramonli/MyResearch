@@ -7,6 +7,20 @@
 		</encoder>
 	</appender>
 
+	<appender name="daily_rollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>./logs/ramonli_sandbox.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>./logs/ramonli_sandbox.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
 	<appender name="metrics_rollingFile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>./logs/ramonli_sandbox_mertrics.log</file>
@@ -21,14 +35,19 @@
 		</encoder>
 	</appender>
 
-	<appender name="async-stdout" class="ch.qos.logback.classic.AsyncAppender">
-		<appender-ref ref="stdout" />
+	<appender name="async-rollingFile" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="daily_rollingFile" />
 		<includeCallerData>true</includeCallerData>
 	</appender>
 	<appender name="async_metrics_rollingFile" class="ch.qos.logback.classic.AsyncAppender">
 		<appender-ref ref="metrics_rollingFile" />
 		<includeCallerData>true</includeCallerData>
 	</appender>
+
+	<logger name="org.perf4j.TimingLogger" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="async-rollingFile" />
+	</logger>
 
 	<logger name="com.ramonli.sandbox">
 		<level value="DEBUG" />
@@ -45,7 +64,7 @@
 	</logger>
 
 	<root level="WARN">
-		<appender-ref ref="async-stdout" />
+		<appender-ref ref="stdout" />
 		<appender-ref ref="async-rollingFile" />
 	</root>
 </configuration>

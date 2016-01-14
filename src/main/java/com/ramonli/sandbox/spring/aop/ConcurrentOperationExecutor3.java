@@ -6,27 +6,28 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 // must be stated as @Component explicitly, otherwise spring container won't realize this @Aspect
 @Component
 @Aspect
-public class ConcurrentOperationExecutor implements Ordered {
-	private Logger logger = LoggerFactory.getLogger(ConcurrentOperationExecutor.class);
+public class ConcurrentOperationExecutor3 implements Ordered {
+	private Logger logger = LoggerFactory.getLogger(ConcurrentOperationExecutor3.class);
 
 	private static final int DEFAULT_MAX_RETRIES = 2;
 
 	private int maxRetries = DEFAULT_MAX_RETRIES;
 	// 优先级别越高，那么那么代理就在整个代理层次的越外面
-	private int order = 1;
+	private int order = 6;
 
 	public void setMaxRetries(int maxRetries) {
 		this.maxRetries = maxRetries;
 	}
 
 	public int getOrder() {
-		return this.order;
+		return 1;
 	}
 
 	public void setOrder(int order) {

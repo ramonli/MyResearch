@@ -23,6 +23,7 @@ public class DefaultOrderService implements OrderService {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
+	@Async
 	@Transactional
 	public String order(String req) {
 		logger.debug("got request: {}", req);

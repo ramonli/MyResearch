@@ -6,13 +6,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 // must be stated as @Component explicitly, otherwise spring container won't realize this @Aspect
 @Component
 @Aspect
-public class ConcurrentOperationExecutor2 implements Ordered {
+public class ConcurrentOperationExecutor2 implements PriorityOrdered {
 	private Logger logger = LoggerFactory.getLogger(ConcurrentOperationExecutor2.class);
 
 	private static final int DEFAULT_MAX_RETRIES = 2;
@@ -31,7 +32,7 @@ public class ConcurrentOperationExecutor2 implements Ordered {
 		 * thrown out...So strange.
 		 */
 		// return Ordered.HIGHEST_PRECEDENCE;
-		return 1;
+		return PriorityOrdered.HIGHEST_PRECEDENCE;
 	}
 
 	// /**
